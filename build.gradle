@@ -1,0 +1,19 @@
+plugins {
+    id 'application'
+	id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.named("run") {
+	standardInput = System.in
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls' ]
+}
+
+mainClassName = 'main.Main'
