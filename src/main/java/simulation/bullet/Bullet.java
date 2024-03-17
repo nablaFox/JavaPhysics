@@ -2,10 +2,9 @@ package simulation.bullet;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import simulation.Constants;
 
 public class Bullet {
-	double angle, initialV, x, y, width, height, angleRad, velocityY, velocityX;
+	double angle, initialV, x, y, width, height, angleRad, velocityY, velocityX, gravity;
 
 	Bullet(
 			double initialX,
@@ -13,8 +12,10 @@ public class Bullet {
 			double bulletWidth,
 			double bulletHeight,
 			double initialV,
-			double angle) {
+			double angle,
+			double gravity) {
 		this.initialV = initialV;
+		this.gravity = gravity;
 		width = bulletWidth;
 		height = bulletHeight;
 		x = initialX;
@@ -25,10 +26,10 @@ public class Bullet {
 
 	// EDO Solver
 	public void updatePos(double dt) {
-		velocityY -= Constants.GRAVITY * dt;
+		velocityY -= gravity * dt;
 
 		x += velocityX * dt;
-		y -= velocityY * dt;
+		y += velocityY * dt;
 	}
 
 	public void updateInitialV(double velocity) {
@@ -43,24 +44,8 @@ public class Bullet {
 		updateInitialV(initialV);
 	}
 
-	public double getX() {
-		return x;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	public double getWidth() {
-		return width;
-	}
-
-	public double getHeight() {
-		return height;
-	}
-
 	public void draw(GraphicsContext gc) {
 		gc.setFill(Color.FIREBRICK);
-		gc.fillRect(x, y, width, height);
+		gc.fillRect(x + 10, gc.getCanvas().getHeight() - height - 30 - y, width, height);
 	}
 }

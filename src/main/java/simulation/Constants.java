@@ -1,5 +1,17 @@
 package simulation;
 
-final public class Constants {
-	public final static double GRAVITY = 9.81;
+public class Constants {
+	double gravity;
+
+	Constants() {
+		gravity = 9.8;
+	}
+
+	public double getGravity() {
+		return gravity;
+	}
+
+	public void setGravity(double gravity) {
+		this.gravity = gravity;
+	}
 }

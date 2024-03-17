@@ -1,6 +1,7 @@
 package main;
 
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.function.BiConsumer;
 
@@ -25,7 +26,9 @@ public class InputPane extends VBox {
 		super();
 		setSpacing(10);
 
-		getChildren().add(new Label(label));
+		Label labelNode = new Label(label);
+		labelNode.setTextFill(Color.WHITE);
+		getChildren().add(labelNode);
 
 		TextField textField = new TextField();
 		textField.setText(defaultValue);
