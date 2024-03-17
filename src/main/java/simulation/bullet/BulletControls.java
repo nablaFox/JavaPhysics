@@ -10,10 +10,10 @@ public class BulletControls extends HBox {
 
 	public BulletControls(BulletSimulation simulation) {
 		super();
+		this.simulation = simulation;
+
 		setPrefHeight(100);
 		addControls();
-
-		this.simulation = simulation;
 	}
 
 	private void addControls() {
@@ -23,10 +23,36 @@ public class BulletControls extends HBox {
 
 		setStyle("-fx-alignment: center;");
 
-		getChildren().add(new InputPane("Initial Velocity"));
-		getChildren().add(new InputPane("Angle"));
+		getChildren().add(new InputPane(
+				"Initial Velocity",
+				simulation.getBullet().initialV + "",
+				(oldValue, newValue) -> {
+					simulation.getBullet().updateInitialV(Double.parseDouble(newValue));
+				}));
 
-		getChildren().add(new Button("Fire"));
-		getChildren().add(new Button("Stop simulation"));
+		getChildren().add(new InputPane(
+				"Angle",
+				simulation.getBullet().angle + "",
+				(oldValue, newValue) -> {
+					simulation.getBullet().updateAngle(Double.parseDouble(newValue));
+				}));
+
+		Button fireButton = new Button("Fire");
+		fireButton.setOnAction(e -> {
+			simulation.fire = true;
+		});
+		getChildren().add(fireButton);
+
+		Button stopButton = new Button("Stop simulation");
+		stopButton.setOnAction(e -> {
+			simulation.stop();
+		});
+		getChildren().add(stopButton);
+
+		Button resumeButton = new Button("Resume simulation");
+		resumeButton.setOnAction(e -> {
+			simulation.start();
+		});
+		getChildren().add(resumeButton);
 	}
 }

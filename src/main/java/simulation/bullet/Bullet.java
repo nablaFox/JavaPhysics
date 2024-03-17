@@ -1,26 +1,66 @@
 package simulation.bullet;
 
-import javafx.scene.shape.Rectangle;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import simulation.Constants;
 
-public class Bullet extends Rectangle {
-	double angle, initialV;
+public class Bullet {
+	double angle, initialV, x, y, width, height, angleRad, velocityY, velocityX;
 
-	Bullet(double initialV, double angle) {
-		super();
-		updateInitial(initialV, angle);
-	}
-
-	public void updatePos(double dt) {
-		double updateX = getX() + initialV * Math.cos(angle) * dt;
-		double updateY = getY() + initialV * Math.sin(angle) * dt - 1 / 2 * Constants.GRAVITY * dt * dt;
-
-		setX(updateX);
-		setY(updateY);
-	}
-
-	public void updateInitial(double initialV, double angle) {
+	Bullet(
+			double initialX,
+			double initialY,
+			double bulletWidth,
+			double bulletHeight,
+			double initialV,
+			double angle) {
 		this.initialV = initialV;
+		width = bulletWidth;
+		height = bulletHeight;
+		x = initialX;
+		y = initialY;
+
+		updateAngle(angle);
+	}
+
+	// EDO Solver
+	public void updatePos(double dt) {
+		velocityY -= Constants.GRAVITY * dt;
+
+		x += velocityX * dt;
+		y -= velocityY * dt;
+	}
+
+	public void updateInitialV(double velocity) {
+		this.initialV = velocity;
+		this.velocityY = velocity * Math.sin(angleRad);
+		this.velocityX = velocity * Math.cos(angleRad);
+	}
+
+	public void updateAngle(double angle) {
 		this.angle = angle;
+		this.angleRad = Math.toRadians(angle);
+		updateInitialV(initialV);
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void draw(GraphicsContext gc) {
+		gc.setFill(Color.FIREBRICK);
+		gc.fillRect(x, y, width, height);
 	}
 }
