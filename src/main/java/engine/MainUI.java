@@ -1,4 +1,4 @@
-package simulation;
+package engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.AnchorPane;
@@ -13,13 +13,15 @@ import javafx.scene.control.ComboBox;
 public class MainUI {
 	AnchorPane root;
 	Stage primaryStage;
-	Physics physics;
+	Engine physics;
 
-	public MainUI(Stage primaryStage, Physics physics) {
+	public MainUI(Stage primaryStage, Engine physics) {
 		this.physics = physics;
 		this.primaryStage = primaryStage;
 		root = new AnchorPane();
+	}
 
+	public void init() {
 		setCanvas();
 		setSimulationControls();
 		selectSimulationControl();
@@ -55,15 +57,14 @@ public class MainUI {
 
 	void selectSimulationControl() {
 		ComboBox<String> simulationSelector = new ComboBox<>();
-		simulationSelector.getItems().addAll("Ballistics", "Pendulum", "Spring");
+		simulationSelector.getItems().addAll(physics.getSimulationList());
 
 		simulationSelector.setOnAction(e -> {
 			String selected = simulationSelector.getValue();
 			if (selected == null)
 				return;
 
-			physics.setSimulation(
-					physics.getFactory().create(selected, physics));
+			physics.setSimulation(selected);
 		});
 
 		AnchorPane.setTopAnchor(simulationSelector, 80.0);

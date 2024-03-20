@@ -1,13 +1,14 @@
-package simulation.bullet;
+package simulations.bullet;
 
-import simulation.Physics;
+import engine.InputPane;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import main.InputPane;
 
-public class BulletSimulation extends simulation.Simulation {
+public class BulletSimulation extends engine.Simulation {
 	Bullet bullet;
+
+	double initialV, angle;
 	boolean fire = false;
 
 	@Override
@@ -18,26 +19,31 @@ public class BulletSimulation extends simulation.Simulation {
 			bullet.updatePos(dt);
 	}
 
-	public BulletSimulation(Physics physics) {
-		this(physics, 80, 45);
-	}
-
-	public BulletSimulation(
-			Physics physics,
-			double initialV,
-			double angle) {
-		super(physics);
-
+	@Override
+	public void init() {
 		this.bullet = new Bullet(
 				0,
 				0,
 				30,
 				30,
-				initialV,
-				angle,
+				this.initialV,
+				this.angle,
 				consts.getGravity());
 
 		setControls();
+	}
+
+	public BulletSimulation() {
+		this(80, 45);
+	}
+
+	public BulletSimulation(
+			double initialV,
+			double angle) {
+		super("Balistics");
+
+		this.initialV = initialV;
+		this.angle = angle;
 	}
 
 	void setControls() {
@@ -75,9 +81,5 @@ public class BulletSimulation extends simulation.Simulation {
 
 	public boolean bulletAtLeft() {
 		return bullet.x == 0;
-	}
-
-	Bullet getBullet() {
-		return bullet;
 	}
 }

@@ -1,4 +1,4 @@
-package simulation;
+package engine;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -6,16 +6,20 @@ import javafx.scene.canvas.GraphicsContext;
 abstract public class Simulation {
 	abstract public void simulate(double dt);
 
+	abstract public void init();
+
 	protected double width, height;
 
-	final protected Physics physics;
-	final protected Canvas canvas;
-	final protected GraphicsContext gc;
-	final protected MainUI mainUI;
+	protected Engine physics;
+	protected Canvas canvas;
+	protected GraphicsContext gc;
+	protected MainUI mainUI;
 	protected Constants consts;
 
-	public Simulation(Physics physics) {
-		this.physics = physics;
+	String name;
+
+	void thisInit(Engine phyiscsEngine) {
+		this.physics = phyiscsEngine;
 		this.canvas = physics.getCanvas();
 		this.gc = canvas.getGraphicsContext2D();
 		this.mainUI = physics.getUI();
@@ -28,5 +32,9 @@ abstract public class Simulation {
 		canvas.heightProperty().addListener((___, __, newValue) -> {
 			this.height = newValue.doubleValue();
 		});
+	}
+
+	public Simulation(String name) {
+		this.name = name;
 	}
 }

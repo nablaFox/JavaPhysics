@@ -1,4 +1,4 @@
-package simulation;
+package engine;
 
 public class Constants {
 	double gravity;

@@ -1,11 +1,13 @@
-package simulation;
+package engine;
+
+import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 
-public class Physics {
+public class Engine {
 	boolean isSimulating = false;
 	double width, height;
 
@@ -13,16 +15,16 @@ public class Physics {
 	GraphicsContext gc;
 	SimulationLoop loop;
 	Constants consts;
-	SimulationFactory simulationFactory;
 	MainUI mainUI;
 
 	Simulation currentSimulation;
+	ArrayList<Simulation> simulations;
 
-	public Physics(Stage primaryStage) {
+	public Engine(Stage primaryStage) {
+		simulations = new ArrayList<Simulation>();
 		loop = new SimulationLoop();
 		consts = new Constants();
 		canvas = new Canvas();
-		simulationFactory = new SimulationFactory();
 		mainUI = new MainUI(primaryStage, this);
 		gc = canvas.getGraphicsContext2D();
 	}
@@ -48,6 +50,11 @@ public class Physics {
 		}
 	}
 
+	public void init() {
+		mainUI.init();
+		start();
+	}
+
 	public void start() {
 		isSimulating = true;
 		loop.start();
@@ -59,15 +66,29 @@ public class Physics {
 		loop.stop();
 	}
 
-	public void setSimulation(Simulation simulation) {
-		if (simulation == null)
-			mainUI.reset();
-
-		currentSimulation = simulation;
+	public void addSimulation(Simulation simulation) {
+		simulation.thisInit(this);
+		simulations.add(simulation);
 	}
 
-	public SimulationFactory getFactory() {
-		return simulationFactory;
+	// very inefficient, hash maps bla bla
+	public void setSimulation(String name) {
+		for (Simulation sim : simulations) {
+			if (sim.name.equals(name)) {
+				currentSimulation = sim;
+				currentSimulation.init();
+				break;
+			}
+		}
+	}
+
+	public ArrayList<String> getSimulationList() {
+		ArrayList<String> names = new ArrayList<String>();
+		for (Simulation sim : simulations) {
+			names.add(sim.name);
+		}
+
+		return names;
 	}
 
 	public Canvas getCanvas() {

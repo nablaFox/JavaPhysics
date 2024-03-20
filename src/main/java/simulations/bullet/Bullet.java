@@ -1,4 +1,4 @@
-package simulation.bullet;
+package simulations.bullet;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
